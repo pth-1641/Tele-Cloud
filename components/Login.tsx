@@ -13,12 +13,13 @@ const Login = ({ onLoginSucess }: { onLoginSucess: () => void }) => {
   const handleLogin = async () => {
     setIsLogging(true);
     try {
-      await axios.get(`https://api.telegram.org/bot${botToken}/getMe`);
+      await axios.post("/api/verify-bot", {
+        botToken,
+      });
       toast.success("Logged in successfully");
-      localStorage.setItem("telegram_bot_token", botToken);
       onLoginSucess();
-    } catch {
-      toast.error("Invalid bot token");
+    } catch (err: any) {
+      toast.error(err.response.data.message);
     } finally {
       setIsLogging(false);
     }
